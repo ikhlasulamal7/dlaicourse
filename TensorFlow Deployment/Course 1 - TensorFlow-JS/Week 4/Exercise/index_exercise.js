@@ -25,22 +25,23 @@ async function train() {
   // using ReLu activation functions where applicable.
   model = tf.sequential({
     layers: [
-        
+      tf.layers.flatten({inputShape: mobilenet.outputs[0].shape.slice(1)}),
+      tf.layers.dense({ units: 100, activation: 'relu'}),
+      tf.layers.dense({ units: 3, activation: 'softmax'})
       // YOUR CODE HERE
-
     ]
   });
     
    
   // Set the optimizer to be tf.train.adam() with a learning rate of 0.0001.
-  const optimizer = // YOUR CODE HERE
+  const optimizer = tf.train.adam(0.0001);// YOUR CODE HERE
     
         
   // Compile the model using the categoricalCrossentropy loss, and
   // the optimizer you defined above.
-  model.compile(// YOUR CODE HERE);
- 
-  let loss = 0;
+  model.compile({optimizer: optimizer, loss: 'categoricalCrossentropy'});
+  // YOUR CODE HERE);
+   let loss = 0;
   model.fit(dataset.xs, dataset.ys, {
     epochs: 10,
     callbacks: {
@@ -71,13 +72,14 @@ function handleButton(elem){
 			spockSamples++;
 			document.getElementById("spocksamples").innerText = "Spock samples:" + spockSamples;
 			break;
-            
+    case "4":
+      lizardSamples++;
+      document.getElementById("lizardsamples").innerText = "Lizard samples:" + lizardSamples;
+      break;
         // Add a case for lizard samples.
         // HINT: Look at the previous cases.
             
-        // YOUR CODE HERE
-		
-            
+        // YOUR CODE HERE            
 	}
 	label = parseInt(elem.id);
 	const img = webcam.capture();
@@ -108,7 +110,9 @@ async function predict() {
 		case 3:
 			predictionText = "I see Spock";
 			break;
-            
+    case 4:
+      predictionText = "I see Lizard";
+      break;   
         // Add a case for lizard samples.
         // HINT: Look at the previous cases.
             
